@@ -1,0 +1,259 @@
+[
+    {
+        "id": "eedecb93.774468",
+        "type": "tab",
+        "label": "Projecto IoT",
+        "disabled": false,
+        "info": ""
+    },
+    {
+        "id": "70676343.c9a58c",
+        "type": "daemon",
+        "z": "eedecb93.774468",
+        "command": "python",
+        "args": "-u /home/pi/rui.py",
+        "cr": true,
+        "redo": true,
+        "op": "lines",
+        "name": "RFIDReader",
+        "x": 149,
+        "y": 329,
+        "wires": [
+            [
+                "44512790.77ebb8",
+                "1f3116bf.949979"
+            ],
+            [],
+            []
+        ]
+    },
+    {
+        "id": "7e14a341.f262ec",
+        "type": "mqtt out",
+        "z": "eedecb93.774468",
+        "name": "",
+        "topic": "estado/porta/relay",
+        "qos": "2",
+        "retain": "",
+        "broker": "71846e0c.05f4d",
+        "x": 1164,
+        "y": 152,
+        "wires": []
+    },
+    {
+        "id": "ec9ccb90.cbbe68",
+        "type": "switch",
+        "z": "eedecb93.774468",
+        "name": "ValidarResposta",
+        "property": "payload",
+        "propertyType": "msg",
+        "rules": [
+            {
+                "t": "eq",
+                "v": "1",
+                "vt": "str"
+            },
+            {
+                "t": "eq",
+                "v": "0",
+                "vt": "str"
+            }
+        ],
+        "checkall": "true",
+        "outputs": 2,
+        "x": 548,
+        "y": 431,
+        "wires": [
+            [
+                "7e14a341.f262ec",
+                "c954ffdc.7c1c4"
+            ],
+            [
+                "e67c0832.5fb5b8"
+            ]
+        ]
+    },
+    {
+        "id": "b7d67a0b.5d9758",
+        "type": "http request",
+        "z": "eedecb93.774468",
+        "name": "",
+        "method": "GET",
+        "ret": "txt",
+        "url": "/web/dev/api/access/{{post}}/relay",
+        "tls": "",
+        "x": 473,
+        "y": 269,
+        "wires": [
+            [
+                "ec9ccb90.cbbe68"
+            ]
+        ]
+    },
+    {
+        "id": "3f6e6a23.08d8b6",
+        "type": "inject",
+        "z": "eedecb93.774468",
+        "name": "post id",
+        "topic": "",
+        "payload": "056715d1",
+        "payloadType": "str",
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "x": 175,
+        "y": 63,
+        "wires": [
+            [
+                "44512790.77ebb8"
+            ]
+        ]
+    },
+    {
+        "id": "44512790.77ebb8",
+        "type": "change",
+        "z": "eedecb93.774468",
+        "name": "",
+        "rules": [
+            {
+                "t": "set",
+                "p": "post",
+                "pt": "msg",
+                "to": "payload",
+                "tot": "msg"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 458,
+        "y": 104,
+        "wires": [
+            [
+                "b7d67a0b.5d9758"
+            ]
+        ]
+    },
+    {
+        "id": "e67c0832.5fb5b8",
+        "type": "mqtt out",
+        "z": "eedecb93.774468",
+        "name": "",
+        "topic": "estado/porta/relay",
+        "qos": "2",
+        "retain": "",
+        "broker": "71846e0c.05f4d",
+        "x": 1256,
+        "y": 634,
+        "wires": []
+    },
+    {
+        "id": "c954ffdc.7c1c4",
+        "type": "delay",
+        "z": "eedecb93.774468",
+        "name": "",
+        "pauseType": "delay",
+        "timeout": "10",
+        "timeoutUnits": "seconds",
+        "rate": "1",
+        "nbRateUnits": "1",
+        "rateUnits": "second",
+        "randomFirst": "1",
+        "randomLast": "5",
+        "randomUnits": "seconds",
+        "drop": false,
+        "x": 944.5,
+        "y": 395,
+        "wires": [
+            [
+                "7f22a43.67f995c"
+            ]
+        ]
+    },
+    {
+        "id": "7f22a43.67f995c",
+        "type": "change",
+        "z": "eedecb93.774468",
+        "name": "",
+        "rules": [
+            {
+                "t": "set",
+                "p": "payload",
+                "pt": "msg",
+                "to": "0",
+                "tot": "num"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 1112.5,
+        "y": 479,
+        "wires": [
+            [
+                "e67c0832.5fb5b8"
+            ]
+        ]
+    },
+    {
+        "id": "1f3116bf.949979",
+        "type": "change",
+        "z": "eedecb93.774468",
+        "name": "so numero de cartao",
+        "rules": [
+            {
+                "t": "set",
+                "p": "payload",
+                "pt": "msg",
+                "to": "payload.d.cardUID",
+                "tot": "msg"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 292,
+        "y": 653,
+        "wires": [
+            [
+                "7440ec2e.0d7f34"
+            ]
+        ]
+    },
+    {
+        "id": "7440ec2e.0d7f34",
+        "type": "debug",
+        "z": "eedecb93.774468",
+        "name": "",
+        "active": false,
+        "console": "false",
+        "complete": "false",
+        "x": 511,
+        "y": 719,
+        "wires": []
+    },
+    {
+        "id": "71846e0c.05f4d",
+        "type": "mqtt-broker",
+        "z": "",
+        "broker": "192.168.0.100",
+        "port": "1883",
+        "clientid": "",
+        "usetls": false,
+        "compatmode": true,
+        "keepalive": "60",
+        "cleansession": true,
+        "willTopic": "ola/mundo",
+        "willQos": "2",
+        "willPayload": "",
+        "birthTopic": "",
+        "birthQos": "0",
+        "birthPayload": ""
+    }
+]
